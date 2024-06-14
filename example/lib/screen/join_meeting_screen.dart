@@ -29,7 +29,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text('Join Meeting'),
+        title: const Text('Join Meeting'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -42,13 +42,13 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                 "Meeting Id",
                 meetingIdController,
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               getDefaultTextFieldWithLabel(
                 context,
                 "Password",
                 passwordController,
               ),
-              SizedBox(height: 32.0),
+              const SizedBox(height: 32.0),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
@@ -62,7 +62,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                       platformCheck(meetingId, password);
                     }
                   },
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ),
             ],
@@ -78,11 +78,10 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
     } else if (Platform.isAndroid || Platform.isIOS) {
       joinMeetingAndroidAndIos(meetingId, password);
     }
-    ;
   }
 
   void joinMeetingWeb(String meetingId, String password) {
-    ZoomOptions zoomOptions = new ZoomOptions(
+    ZoomOptions zoomOptions = ZoomOptions(
       domain: "zoom.us",
       clientId: configs["MEETING_SDK_CLIENT_KEY"],
       clientSecert: configs["MEETING_SDK_CLIENT_SECRET"],
@@ -94,7 +93,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
       disableJoinAudio: false, // Optional - For Web
       audioPanelAlwaysOpen: false, // Optional - For Web
     );
-    var meetingOptions = new MeetingOptions(
+    var meetingOptions = MeetingOptions(
         displayName: "Join test user",
         meetingId: meetingId, //Personal meeting id for join meeting required
         meetingPassword:
@@ -108,7 +107,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
         zoom
             .joinMeting(meetingOptions: meetingOptions)
             .then((joinMeetingResult) {
-          print("[Meeting Status Polling] : " + joinMeetingResult.toString());
+          print("[Meeting Status Polling] : $joinMeetingResult");
         });
       }
     }).catchError((error) {
@@ -117,7 +116,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
   }
 
   void joinMeetingAndroidAndIos(String meetingId, String password) async {
-    ZoomOptions zoomOptions = new ZoomOptions(
+    ZoomOptions zoomOptions = ZoomOptions(
       domain: "zoom.us",
       clientId: configs["MEETING_SDK_CLIENT_KEY"],
       clientSecert: configs["MEETING_SDK_CLIENT_SECRET"],
@@ -137,7 +136,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
 
   void _showSnackBar(BuildContext context) {
     final snackBar = SnackBar(
-      content: Text('Please fill all the empty fields'),
+      content: const Text('Please fill all the empty fields'),
       action: SnackBarAction(
         label: 'Close',
         onPressed: () {},
@@ -188,10 +187,10 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
           autofocus: false,
           obscureText: isPassword,
           showCursor: true,
-          cursorColor: Color(0xFF23408F),
+          cursorColor: const Color(0xFF23408F),
           maxLength: maxLength,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w700,
             fontSize: 15,
@@ -205,17 +204,17 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
             fillColor: Colors.white,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Color(0xFFDEDEDE), width: 1),
+              borderSide: const BorderSide(color: Color(0xFFDEDEDE), width: 1),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Color(0xFF23408F), width: 1),
+              borderSide: const BorderSide(color: Color(0xFF23408F), width: 1),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Color(0xFFDEDEDE), width: 1),
+              borderSide: const BorderSide(color: Color(0xFFDEDEDE), width: 1),
             ),
-            suffixIconConstraints: BoxConstraints(
+            suffixIconConstraints: const BoxConstraints(
               maxHeight: 24,
             ),
             suffixIcon: withSuffix
@@ -224,7 +223,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
                       imageFunction!();
                     },
                     child: Padding(
-                      padding: EdgeInsets.only(right: 18),
+                      padding: const EdgeInsets.only(right: 18),
                       child: Icon(suffixImage, size: 20.0),
                     ),
                   )
@@ -232,7 +231,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
             prefixIconConstraints: constraint,
             prefixIcon: isPrefix ? prefix : null,
             labelText: label,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Color(0xFF9B9B9B),
               fontWeight: FontWeight.w700,
               fontSize: 15,

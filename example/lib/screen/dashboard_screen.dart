@@ -7,11 +7,13 @@ import 'package:zoom_allinonesdk/zoom_allinonesdk.dart';
 import 'join_meeting_screen.dart';
 
 class DashBoardScreen extends StatelessWidget {
+  const DashBoardScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Meetings"),
+        title: const Text("Meetings"),
         automaticallyImplyLeading: false,
       ),
       body: _buildHeaderButtons(context),
@@ -20,7 +22,7 @@ class DashBoardScreen extends StatelessWidget {
 
   Widget _buildHeaderButtons(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       height: 120,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -31,7 +33,7 @@ class DashBoardScreen extends StatelessWidget {
           _buildIconButton(Icons.add, "Join Meeting", () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => JoinMeetingScreen()),
+              MaterialPageRoute(builder: (context) => const JoinMeetingScreen()),
             );
           }),
         ],
@@ -43,7 +45,7 @@ class DashBoardScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             Container(
@@ -55,7 +57,7 @@ class DashBoardScreen extends StatelessWidget {
               ),
               child: Icon(color: Colors.white, iconData),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(text),
           ],
         ),
@@ -76,7 +78,7 @@ class DashBoardScreen extends StatelessWidget {
   }
 
   void startMeetingAndroidAndIOS() async {
-    ZoomOptions zoomOptions = new ZoomOptions(
+    ZoomOptions zoomOptions = ZoomOptions(
       domain: "zoom.us",
       clientId: configs["MEETING_SDK_CLIENT_KEY"],
       clientSecert: configs["MEETING_SDK_CLIENT_SECRET"],
@@ -94,16 +96,16 @@ class DashBoardScreen extends StatelessWidget {
                 clientSecret: configs["SERVER_TO_SERVER_CLIENT_SECRET"],
                 meetingOptions: meetingOptions)
             .then((loginResult) {
-          print("loginResult " + loginResult.toString());
+          print("loginResult $loginResult");
         });
       }
     }).catchError((error) {
-      print("[Error Generated] : " + error.toString());
+      print("[Error Generated] : $error");
     });
   }
 
   void startMeetingForWeb() {
-    ZoomOptions zoomOptions = new ZoomOptions(
+    ZoomOptions zoomOptions = ZoomOptions(
       domain: "zoom.us",
       clientId: configs["MEETING_SDK_CLIENT_KEY"],
       clientSecert: configs["MEETING_SDK_CLIENT_SECRET"],
@@ -115,7 +117,7 @@ class DashBoardScreen extends StatelessWidget {
       disableJoinAudio: false, // Optional - For Web
       audioPanelAlwaysOpen: false, // Optional - For Web
     );
-    var meetingOptions = new MeetingOptions(
+    var meetingOptions = MeetingOptions(
         displayName: "Web test user",
         meetingId:
             "YOUR_MEETING_ID", //Personal meeting id for start meeting required
@@ -133,7 +135,7 @@ class DashBoardScreen extends StatelessWidget {
                 clientSecret: configs["SERVER_TO_SERVER_CLIENT_SECRET"],
                 meetingOptions: meetingOptions)
             .then((joinMeetingResult) {
-          print("[Meeting Status Polling] : " + joinMeetingResult.toString());
+          print("[Meeting Status Polling] : $joinMeetingResult");
         });
       }
     }).catchError((error) {
