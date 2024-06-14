@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'dart:js';
+import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:zoom_allinonesdk/data/models/meeting_options.dart';
 import 'data/models/accesstokenmodel.dart';
@@ -26,9 +27,13 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
 
     zoomoptions = options;
 
-    ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.0/lib', '/av');
+    debugPrint("Initialising FlutterZoomWeb ie Native Web");
+
+    ZoomMtg.setZoomJSLib('https://source.zoom.us/3.6.0/lib', '/av');
     ZoomMtg.preLoadWasm();
     ZoomMtg.prepareWebSDK();
+
+    debugPrint("Prepared WebSDK and Loaded Wasm");
 
     ZoomMtg.i18n.load(options.language);
     ZoomMtg.init(InitParams(
@@ -49,6 +54,8 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
     try {
       return await completer.future;
     } catch (e) {
+      debugPrint("FlutterZoomWeb Init Error: $e");
+
       return [1, 0];
     }
   }
@@ -62,16 +69,22 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
       required MeetingOptions meetingOptions}) async {
     final Completer<List> completer = Completer();
 
+    debugPrint("FlutterZoomWeb, Start Meeting Called");
+
     String jwtSignature = jwtGenerator.generate(
         key: zoomoptions.clientId ?? "",
         secret: zoomoptions.clientSecert ?? "",
         meetingId: int.tryParse(meetingOptions.meetingId ?? "") ?? 0,
         role: meetingOptions.userType ?? "1");
 
+    debugPrint("FlutterZoomWeb, JWT Generated");
+
     // Instantiate ZoomProvider and ZoomRepository
     final ZoomProvider zoomProvider = ZoomProvider();
     final ZoomRepository repository =
         ZoomRepository(zoomProvider: zoomProvider);
+
+    debugPrint("FlutterZoomWeb, Fetching Access Token");
 
     // Fetch access token
     final AccessTokenModel accessTokenResponse =
@@ -81,12 +94,18 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
       clientSecret: clientSecret,
     );
 
+    debugPrint(
+        "FlutterZoomWeb, Access Token: ${accessTokenResponse.accessToken}");
+    debugPrint("FlutterZoomWeb, Fetching ZAK Token");
+
     // Fetch zak token
     final String zakTokenResponse = await repository.fetchZaktoken(
       clientId: clientId,
       clientSecret: clientSecret,
       accessToken: accessTokenResponse.accessToken,
     );
+
+    debugPrint("FlutterZoomWeb, Joining Meet");
 
     ZoomMtg.join(JoinParams(
         meetingNumber: meetingOptions.meetingId,
@@ -96,9 +115,13 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
         passWord: meetingOptions.meetingPassword,
         zak: zakTokenResponse,
         success: allowInterop((var res) {
+          debugPrint("FlutterZoomWeb, Success in ZoomMtg.join(), $res");
+
           completer.complete(["MEETING STATUS", "SUCCESS"]);
         }),
         error: allowInterop((var res) {
+          debugPrint("FlutterZoomWeb, Error Occured in ZoomMtg.join(), $res");
+
           completer.complete(["MEETING STATUS", "FAILED"]);
         })));
     return ["MEETING STATUS", "Working"];

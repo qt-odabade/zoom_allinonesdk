@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'data/models/meeting_options.dart';
 import 'data/models/zoom_options.dart';
 import 'zoom_allinonesdk_platform_interface.dart';
@@ -13,6 +15,8 @@ class ZoomAllInOneSdk {
   Future<List> initZoom({
     required ZoomOptions zoomOptions,
   }) {
+    debugPrint("Init Zoom @ PLatform Called");
+
     return _platform.initZoom(options: zoomOptions);
   }
 
@@ -25,6 +29,8 @@ class ZoomAllInOneSdk {
       required String clientSecret,
       required String accountId,
       required MeetingOptions meetingOptions}) {
+    debugPrint("Start Meeting @ PLatform Called");
+
     return _platform.startMeeting(
         accountId: accountId,
         clientId: clientId,
