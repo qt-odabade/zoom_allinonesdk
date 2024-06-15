@@ -4,10 +4,7 @@ import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:zoom_allinonesdk/data/models/meeting_options.dart';
-import 'data/models/accesstokenmodel.dart';
 import 'data/models/zoom_options.dart';
-import 'data/providers/zoom_provider.dart';
-import 'data/repositories/zoom_repository.dart';
 import 'data/util/jwt_generator.dart';
 import 'webSupport/zoom_js.dart';
 import 'zoom_allinonesdk_platform_interface.dart';
@@ -75,50 +72,25 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
 
     debugPrint("FlutterZoomWeb, Start Meeting Called");
 
-    String jwtSignature = jwtGenerator.generate(
-      key: zoomoptions.clientId,
-      secret: zoomoptions.clientSecert,
-      meetingId: int.tryParse(meetingOptions.meetingId ?? "") ?? 0,
-      role: meetingOptions.userType ?? "1",
-    );
+    // TODO: Add JWT Signature Here
+    String jwtSignature = "";
 
     debugPrint("FlutterZoomWeb, JWT Generated");
 
-    // Instantiate ZoomProvider and ZoomRepository
-    final ZoomProvider zoomProvider = ZoomProvider();
-    final ZoomRepository repository =
-        ZoomRepository(zoomProvider: zoomProvider);
-
-    debugPrint("FlutterZoomWeb, Fetching Access Token");
-
-    // Fetch access token
-    final AccessTokenModel accessTokenResponse =
-        await repository.fetchAccesstoken(
-      accountId: accountId,
-      clientId: clientId,
-      clientSecret: clientSecret,
-    );
-
-    debugPrint(
-        "FlutterZoomWeb, Access Token: ${accessTokenResponse.accessToken}");
-    debugPrint("FlutterZoomWeb, Fetching ZAK Token");
-
-    // Fetch zak token
-    final String zakTokenResponse = await repository.fetchZaktoken(
-      clientId: clientId,
-      clientSecret: clientSecret,
-      accessToken: accessTokenResponse.accessToken,
-    );
+    // TODO: Add ZAK Token Here
+    const String zakTokenResponse = "";
 
     debugPrint("FlutterZoomWeb, Joining Meet");
 
     ZoomMtg.join(
       JoinParams(
-        meetingNumber: meetingOptions.meetingId,
-        userName: meetingOptions.displayName ?? meetingOptions.userId,
+        // TODO: Add Meeting Id Here
+        meetingNumber: 85081511063,
+        userName: "Drsya App Test",
         signature: jwtSignature,
         sdkKey: zoomoptions.clientId,
-        passWord: meetingOptions.meetingPassword,
+        // TODO: Update password here (if required)
+        passWord: "123456",
         zak: zakTokenResponse,
         success: allowInterop((var res) {
           debugPrint("FlutterZoomWeb, Success in ZoomMtg.join(), $res");
