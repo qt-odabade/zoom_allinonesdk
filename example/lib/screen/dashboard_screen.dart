@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:example/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -70,40 +69,10 @@ class DashBoardScreen extends StatelessWidget {
     try {
       if (kIsWeb) {
         startMeetingForWeb();
-      } else if (Platform.isAndroid || Platform.isIOS) {
-        startMeetingAndroidAndIOS();
       }
     } catch (e, stackTrace) {
       print(stackTrace);
     }
-  }
-
-  void startMeetingAndroidAndIOS() async {
-    ZoomOptions zoomOptions = ZoomOptions(
-      domain: "zoom.us",
-      clientId: meetingSDKClientId,
-      clientSecert: meetingSDKClientSecret,
-    );
-    var meetingOptions = MeetingOptions(
-        displayName: "", meetingId: "", meetingPassword: "", userType: "1");
-
-    var zoom = ZoomAllInOneSdk();
-    zoom.initZoom(zoomOptions: zoomOptions).then((results) {
-      if (results[0] == 0) {
-        zoom
-            .startMeeting(
-          accountId: s2sAccountId,
-          clientId: s2sClientId,
-          clientSecret: s2sClientSecret,
-          meetingOptions: meetingOptions,
-        )
-            .then((loginResult) {
-          print("loginResult $loginResult");
-        });
-      }
-    }).catchError((error) {
-      print("[Error Generated] : $error");
-    });
   }
 
   void startMeetingForWeb() {
@@ -121,28 +90,34 @@ class DashBoardScreen extends StatelessWidget {
     );
 
     var meetingOptions = MeetingOptions(
-        displayName: "Web test user",
-        meetingId:
-            "YOUR_MEETING_ID", //Personal meeting id for start meeting required
-        meetingPassword:
-            "YOUR_MEETING_PASSWORD", //Personal meeting passcode for start meeting required
-        userType: "1");
+      displayName: "Web test user",
+      meetingId:
+          "YOUR_MEETING_ID", //Personal meeting id for start meeting required
+      meetingPassword:
+          "YOUR_MEETING_PASSWORD", //Personal meeting passcode for start meeting required
+      userType: "1",
+    );
 
     var zoom = ZoomAllInOneSdk();
-    zoom.initZoom(zoomOptions: zoomOptions).then((results) {
-      if (results[0] == 200) {
-        zoom
-            .startMeeting(
-                accountId: s2sAccountId,
-                clientId: s2sClientId,
-                clientSecret: s2sClientSecret,
-                meetingOptions: meetingOptions)
-            .then((joinMeetingResult) {
-          print("[Meeting Status Polling] : $joinMeetingResult");
-        });
-      }
-    }).catchError((error) {
-      print("[Error Generated] : " + error);
-    });
+
+    zoom.initZoom(zoomOptions: zoomOptions).then(
+      (results) {
+        if (results[0] == 200) {
+          zoom
+              .startMeeting(
+                  accountId: s2sAccountId,
+                  clientId: s2sClientId,
+                  clientSecret: s2sClientSecret,
+                  meetingOptions: meetingOptions)
+              .then((joinMeetingResult) {
+            print("[Meeting Status Polling] : $joinMeetingResult");
+          });
+        }
+      },
+    ).catchError(
+      (error) {
+        print("[Error Generated] : " + error);
+      },
+    );
   }
 }
