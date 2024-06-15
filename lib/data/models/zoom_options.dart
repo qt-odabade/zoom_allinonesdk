@@ -1,11 +1,11 @@
 /// Basic Zoom Options required for plugin (WEB, iOS, Android)
 class ZoomOptions {
   /// Domain For Zoom Web
-  String? domain;
+  String domain;
 
-  String? clientId;
+  String clientId;
 
-  String? clientSecert;
+  String clientSecert;
 
   /// --JWT token for web / iOS / Android
   String? jwtSignature;
