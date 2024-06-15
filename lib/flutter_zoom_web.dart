@@ -76,10 +76,11 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
     debugPrint("FlutterZoomWeb, Start Meeting Called");
 
     String jwtSignature = jwtGenerator.generate(
-        key: zoomoptions.clientId ?? "",
-        secret: zoomoptions.clientSecert ?? "",
-        meetingId: int.tryParse(meetingOptions.meetingId ?? "") ?? 0,
-        role: meetingOptions.userType ?? "1");
+      key: zoomoptions.clientId,
+      secret: zoomoptions.clientSecert,
+      meetingId: int.tryParse(meetingOptions.meetingId ?? "") ?? 0,
+      role: meetingOptions.userType ?? "1",
+    );
 
     debugPrint("FlutterZoomWeb, JWT Generated");
 
@@ -143,8 +144,8 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
     final Completer<bool> completer = Completer();
 
     String jwtSignature = jwtGenerator.generate(
-      key: zoomoptions.clientId ?? "",
-      secret: zoomoptions.clientSecert ?? "",
+      key: zoomoptions.clientId,
+      secret: zoomoptions.clientSecert,
       meetingId: int.tryParse(meetingOptions.meetingId ?? "") ?? 0,
       role: meetingOptions.userType ?? "0",
     );
