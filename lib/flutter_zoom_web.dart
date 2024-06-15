@@ -29,28 +29,31 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
 
     debugPrint("Initialising FlutterZoomWeb ie Native Web");
 
-    ZoomMtg.setZoomJSLib('https://source.zoom.us/3.6.0/lib', '/av');
+    ZoomMtg.setZoomJSLib('https://source.zoom.us/3.7.0/lib', '/av');
     ZoomMtg.preLoadWasm();
     ZoomMtg.prepareWebSDK();
 
     debugPrint("Prepared WebSDK and Loaded Wasm");
 
     ZoomMtg.i18n.load(options.language);
-    ZoomMtg.init(InitParams(
-      leaveUrl: '/index.html',
-      success: allowInterop((res) {
-        var zr = window.document.getElementById("zmmtg-root");
-        querySelector('body')?.append(zr!);
 
-        var div = window.document.getElementById("aria-notify-area");
-        querySelector('body')?.append(div!);
-        completer.complete([200, 0]);
-      }),
-      error: allowInterop((res) {
-        completer.completeError([1, 0]);
-      }),
-      // URL for web participants to leave the meeting
-    ));
+    ZoomMtg.init(
+      InitParams(
+        leaveUrl: '/index.html',
+        success: allowInterop((res) {
+          var zr = window.document.getElementById("zmmtg-root");
+          querySelector('body')?.append(zr!);
+
+          var div = window.document.getElementById("aria-notify-area");
+          querySelector('body')?.append(div!);
+          completer.complete([200, 0]);
+        }),
+        error: allowInterop((res) {
+          completer.completeError([1, 0]);
+        }),
+        // URL for web participants to leave the meeting
+      ),
+    );
     try {
       return await completer.future;
     } catch (e) {
@@ -62,11 +65,12 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
 
   /// Start Meeting Function for Zoom Web
   @override
-  Future<List> startMeeting(
-      {required String clientId,
-      required String clientSecret,
-      required String accountId,
-      required MeetingOptions meetingOptions}) async {
+  Future<List> startMeeting({
+    required String clientId,
+    required String clientSecret,
+    required String accountId,
+    required MeetingOptions meetingOptions,
+  }) async {
     final Completer<List> completer = Completer();
 
     debugPrint("FlutterZoomWeb, Start Meeting Called");
@@ -107,7 +111,8 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
 
     debugPrint("FlutterZoomWeb, Joining Meet");
 
-    ZoomMtg.join(JoinParams(
+    ZoomMtg.join(
+      JoinParams(
         meetingNumber: meetingOptions.meetingId,
         userName: meetingOptions.displayName ?? meetingOptions.userId,
         signature: jwtSignature,
@@ -119,11 +124,16 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
 
           completer.complete(["MEETING STATUS", "SUCCESS"]);
         }),
-        error: allowInterop((var res) {
-          debugPrint("FlutterZoomWeb, Error Occured in ZoomMtg.join(), $res");
+        error: allowInterop(
+          (var res) {
+            debugPrint("FlutterZoomWeb, Error Occured in ZoomMtg.join(), $res");
 
-          completer.complete(["MEETING STATUS", "FAILED"]);
-        })));
+            completer.complete(["MEETING STATUS", "FAILED"]);
+          },
+        ),
+      ),
+    );
+
     return ["MEETING STATUS", "Working"];
   }
 
@@ -131,12 +141,16 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
   @override
   Future<bool> joinMeeting({required MeetingOptions meetingOptions}) async {
     final Completer<bool> completer = Completer();
+
     String jwtSignature = jwtGenerator.generate(
-        key: zoomoptions.clientId ?? "",
-        secret: zoomoptions.clientSecert ?? "",
-        meetingId: int.tryParse(meetingOptions.meetingId ?? "") ?? 0,
-        role: meetingOptions.userType ?? "0");
-    ZoomMtg.join(JoinParams(
+      key: zoomoptions.clientId ?? "",
+      secret: zoomoptions.clientSecert ?? "",
+      meetingId: int.tryParse(meetingOptions.meetingId ?? "") ?? 0,
+      role: meetingOptions.userType ?? "0",
+    );
+
+    ZoomMtg.join(
+      JoinParams(
         meetingNumber: meetingOptions.meetingId,
         userName: meetingOptions.displayName ?? meetingOptions.userId,
         signature: jwtSignature,
@@ -145,9 +159,14 @@ class FlutterZoomWeb extends ZoomAllInOneSdkPlatform {
         success: allowInterop((var res) {
           completer.complete(true);
         }),
-        error: allowInterop((var res) {
-          completer.complete(false);
-        })));
+        error: allowInterop(
+          (var res) {
+            completer.complete(false);
+          },
+        ),
+      ),
+    );
+
     return completer.future;
   }
 }
