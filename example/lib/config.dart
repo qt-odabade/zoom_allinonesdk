@@ -1,7 +1,6 @@
-const Map configs = {
-  'MEETING_SDK_CLIENT_KEY': 'YOUR_MEETING_SDK_CLIENT_KEY',
-  'MEETING_SDK_CLIENT_SECRET': 'YOUR_MEETING_SDK_CLIENT_SECRET',
-  'SERVER_TO_SERVER_CLIENT_KEY': 'YOUR_SERVER_TO_SERVER_CLIENT_KEY',
-  'SERVER_TO_SERVER_CLIENT_SECRET': 'YOUR_SERVER_TO_SERVER_CLIENT_SECRET',
-  'SERVER_TO_SERVER_ACCOUNT_ID': 'YOUR_SERVER_TO_SERVER_ACCOUNT_ID'
-};
+const String s2sAccountId = "";
+const String s2sClientId = "";
+const String s2sClientSecret = "";
+
+const String meetingSDKClientId = "";
+const String meetingSDKClientSecret = "";

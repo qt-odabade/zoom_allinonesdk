@@ -83,8 +83,8 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
   void joinMeetingWeb(String meetingId, String password) {
     ZoomOptions zoomOptions = ZoomOptions(
       domain: "zoom.us",
-      clientId: configs["MEETING_SDK_CLIENT_KEY"],
-      clientSecert: configs["MEETING_SDK_CLIENT_SECRET"],
+      clientId: meetingSDKClientId,
+      clientSecert: meetingSDKClientSecret,
       language: "en-US", // Optional - For Web
       showMeetingHeader: true, // Optional - For Web
       disableInvite: false, // Optional - For Web
@@ -118,8 +118,8 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
   void joinMeetingAndroidAndIos(String meetingId, String password) async {
     ZoomOptions zoomOptions = ZoomOptions(
       domain: "zoom.us",
-      clientId: configs["MEETING_SDK_CLIENT_KEY"],
-      clientSecert: configs["MEETING_SDK_CLIENT_SECRET"],
+      clientId: meetingSDKClientId,
+      clientSecert: meetingSDKClientSecret,
     );
     var meetingOptions = MeetingOptions(
         displayName: "", meetingId: meetingId, meetingPassword: password);

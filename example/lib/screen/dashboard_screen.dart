@@ -33,7 +33,8 @@ class DashBoardScreen extends StatelessWidget {
           _buildIconButton(Icons.add, "Join Meeting", () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const JoinMeetingScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const JoinMeetingScreen()),
             );
           }),
         ],
@@ -80,8 +81,8 @@ class DashBoardScreen extends StatelessWidget {
   void startMeetingAndroidAndIOS() async {
     ZoomOptions zoomOptions = ZoomOptions(
       domain: "zoom.us",
-      clientId: configs["MEETING_SDK_CLIENT_KEY"],
-      clientSecert: configs["MEETING_SDK_CLIENT_SECRET"],
+      clientId: meetingSDKClientId,
+      clientSecert: meetingSDKClientSecret,
     );
     var meetingOptions = MeetingOptions(
         displayName: "", meetingId: "", meetingPassword: "", userType: "1");
@@ -91,10 +92,11 @@ class DashBoardScreen extends StatelessWidget {
       if (results[0] == 0) {
         zoom
             .startMeeting(
-                accountId: configs["SERVER_TO_SERVER_ACCOUNT_ID"],
-                clientId: configs["SERVER_TO_SERVER_CLIENT_KEY"],
-                clientSecret: configs["SERVER_TO_SERVER_CLIENT_SECRET"],
-                meetingOptions: meetingOptions)
+          accountId: s2sAccountId,
+          clientId: s2sClientId,
+          clientSecret: s2sClientSecret,
+          meetingOptions: meetingOptions,
+        )
             .then((loginResult) {
           print("loginResult $loginResult");
         });
@@ -107,8 +109,8 @@ class DashBoardScreen extends StatelessWidget {
   void startMeetingForWeb() {
     ZoomOptions zoomOptions = ZoomOptions(
       domain: "zoom.us",
-      clientId: configs["MEETING_SDK_CLIENT_KEY"],
-      clientSecert: configs["MEETING_SDK_CLIENT_SECRET"],
+      clientId: meetingSDKClientId,
+      clientSecert: meetingSDKClientSecret,
       language: "en-US", // Optional - For Web
       showMeetingHeader: true, // Optional - For Web
       disableInvite: false, // Optional - For Web
@@ -117,6 +119,7 @@ class DashBoardScreen extends StatelessWidget {
       disableJoinAudio: false, // Optional - For Web
       audioPanelAlwaysOpen: false, // Optional - For Web
     );
+
     var meetingOptions = MeetingOptions(
         displayName: "Web test user",
         meetingId:
@@ -130,9 +133,9 @@ class DashBoardScreen extends StatelessWidget {
       if (results[0] == 200) {
         zoom
             .startMeeting(
-                accountId: configs["SERVER_TO_SERVER_ACCOUNT_ID"],
-                clientId: configs["SERVER_TO_SERVER_CLIENT_KEY"],
-                clientSecret: configs["SERVER_TO_SERVER_CLIENT_SECRET"],
+                accountId: s2sAccountId,
+                clientId: s2sClientId,
+                clientSecret: s2sClientSecret,
                 meetingOptions: meetingOptions)
             .then((joinMeetingResult) {
           print("[Meeting Status Polling] : $joinMeetingResult");
